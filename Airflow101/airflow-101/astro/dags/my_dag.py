@@ -24,7 +24,7 @@ def print_d():
 def print_e():
     print("Welcome D!")
 
-with DAG('my_dag', start_date=datetime(2024,2,11,21,47,00),
+with DAG('my_dag', start_date=datetime(2024,2,11),
          description='A simple tutorial DAG', default_args=default_args,
          tags=['data_science'], schedule='@daily', catchup=False) as dag:
     
