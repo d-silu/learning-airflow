@@ -7,20 +7,22 @@ from airflow import DAG
 from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
 
+folder_path = '/home/ashrulochan/Downloads/learning-airflow/Data-Pipeline-with-Apache-Airflow/tmp'
+
 
 def _get_pictures():
     # ensure directory exists
-    pathlib.Path("/home/ashrulochan/tmp/images").mkdir(parents=True, exist_ok=True)
+    pathlib.Path(f"{folder_path}/images").mkdir(parents=True, exist_ok=True)
     
     # Download all pictures in launches.json
-    with open('/home/ashrulochan/tmp/launches.json') as f:
+    with open(f'{folder_path}/launches.json') as f:
         launches = json.load(f)
         img_urls = [launch['image'] for launch in launches['results']]
         for image_url in img_urls:
             try:
                 response = requests.get(image_url)
                 image_file_name = image_url.split('/')[-1]
-                target_file = f"/home/ashrulochan/tmp/images/{image_file_name}"
+                target_file = f"{folder_path}/images/{image_file_name}"
                 with open(target_file, 'wb') as f:
                     f.write(response.content)
                 print(f"Downloaded {image_url} to {target_file}")
@@ -33,7 +35,7 @@ def _get_pictures():
 
 def _fetch_api_data():
     res = requests.get('https://ll.thespacedevs.com/2.0.0/launch/upcoming')
-    with open('/home/ashrulochan/tmp/launches.json', 'w') as f:
+    with open(f'{folder_path}/launches.json', 'w') as f:
         data = res.json()
         json.dump(data, f)
 
@@ -68,7 +70,7 @@ get_pictures = PythonOperator(
 
 notify = BashOperator(
     task_id='notify',
-    bash_command='echo "There are now $(ls /tmp/images/ | wc -l) images."',
+    bash_command=f'echo "There are now $(ls {folder_path}/images/ | wc -l) images."',
     dag=dag
 )
 
