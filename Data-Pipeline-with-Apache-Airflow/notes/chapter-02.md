@@ -69,7 +69,9 @@ _____ minute (0 - 59)
 - Every day at 00:00 and 12:00 = `0 0,12 * * *`
 
 **Airflow presents for frequently used scheduling intervals**
+
 | Preset | Meaning |
+|--------|---------|
 | `@once` | Scheduled once and only once.|
 | `@hourly` | Run once an hour at the beginning of the hour.|
 | `@daily` | Run once a day at midnight.|
